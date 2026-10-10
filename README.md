@@ -61,3 +61,7 @@ build/ClaudeUsage.app/Contents/MacOS/ClaudeUsage --snapshot out --demo   # rende
 | `Sources/History.swift`, `Insights.swift` | recorded percentages → today / last 24 hours |
 | `Sources/PopoverView.swift`, `Widget.swift`, `Components.swift` | UI |
 | `Sources/Snapshot.swift` | screenshot / demo mode |
+
+## License
+
+[MIT](LICENSE)
