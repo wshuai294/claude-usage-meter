@@ -43,6 +43,8 @@ final class WidgetController {
                             styleMask: [.borderless, .nonactivatingPanel],
                             backing: .buffered, defer: false)
         p.contentViewController = host
+        // Size to the content now, so the default position below uses the real width.
+        p.setContentSize(host.view.fittingSize)
         p.isOpaque = false
         p.backgroundColor = .clear
         p.hasShadow = true
@@ -60,10 +62,15 @@ final class WidgetController {
                                                object: nil, queue: .main) { _ in
             Task { @MainActor in WidgetController.shared.keepOnScreen() }
         }
+        // The content can grow after launch (e.g. once data arrives); keep the whole widget visible.
+        NotificationCenter.default.addObserver(forName: NSWindow.didResizeNotification, object: p, queue: .main) { _ in
+            Task { @MainActor in WidgetController.shared.keepOnScreen() }
+        }
     }
 
     private func moveToDefaultPosition(_ p: NSPanel) {
-        guard let vf = NSScreen.main?.visibleFrame else { return }
+        // The primary display (the one with the menu bar), not whichever screen has focus right now.
+        guard let vf = (NSScreen.screens.first ?? NSScreen.main)?.visibleFrame else { return }
         p.setFrameTopLeftPoint(NSPoint(x: vf.maxX - p.frame.width - 24, y: vf.maxY - 24))
     }
 

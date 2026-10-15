@@ -41,7 +41,7 @@ if [[ "${1:-}" == "--install" ]]; then
     while pgrep -x ClaudeUsage >/dev/null; do sleep 0.2; done
     rm -rf "$DEST"
     cp -R "$APP" "$DEST"
-    open "$DEST"
+    open "$DEST" 2>/dev/null || { sleep 1; open "$DEST"; }   # LaunchServices can briefly refuse right after quit
     echo "Installed to $DEST"
 else
     echo "Built $APP"
